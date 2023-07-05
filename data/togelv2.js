@@ -98,26 +98,51 @@ function runPrediction() {
                       // Menghapus karakter ANSI dari hasil
                       const plainResult = stripAnsi(result);
 
-                      // Menyimpan hasil di file .txt
-                      const fileName = `${pasaran}-${angka}-${getDate()}.txt`;
-                      const fileSave = `./prediksi/${fileName}`;
-                      const fileContent = `Hasil Prediksi ${pasaran}\n\n${plainResult}\n\nTerima kasih telah menggunakan tools saya`;
-                      fs.writeFile(fileSave, fileContent, "utf8", (err) => {
-                        if (err) {
-                          console.error(err);
-                          return;
+                      rl.question(
+                        `${colors.yellow}Apakah Anda ingin menyimpan hasil prediksi ke dalam file? (y/n): ${colors.reset}`,
+                        (saveToFile) => {
+                          if (saveToFile.toLowerCase() === "y") {
+                            // Menyimpan hasil ke dalam file
+                            const fileName = `${pasaran}-${angka}-${getDate()}.txt`;
+                            const fileSave = `./prediksi/${fileName}`;
+                            const fileContent = `Hasil Prediksi ${pasaran}\n\n${plainResult}\n\nTerima kasih telah menggunakan tools saya`;
+
+                            // Mengecek apakah folder prediksi sudah ada atau belum
+                            const folderPath = "./prediksi";
+                            if (!fs.existsSync(folderPath)) {
+                              fs.mkdir(
+                                folderPath,
+                                { recursive: true },
+                                (err) => {
+                                  if (err) {
+                                    console.error(err);
+                                    return;
+                                  }
+                                  saveFile(fileSave, fileContent, fileName);
+                                }
+                              );
+                            } else {
+                              saveFile(fileSave, fileContent, fileName);
+                            }
+                          } else {
+                            // Menampilkan hasil di terminal
+                            console.log(
+                              `${colors.cyan}\nHasil prediksi ${pasaran}\n${plainResult}\n${colors.reset}`
+                            );
+                            console.log(
+                              `${colors.cyan}\nTerima kasih telah menggunakan tools saya${colors.reset}`
+                            );
+                          }
+
+                          rl.close();
                         }
-                        console.log(
-                          `Hasil prediksi telah disimpan di file ${fileName}`
-                        );
-                      });
+                      );
                     } else {
                       console.log(
                         `${colors.red}Data tidak ada.${colors.reset}`
                       );
+                      rl.close();
                     }
-
-                    rl.close();
                   }
                 );
               }
@@ -125,6 +150,18 @@ function runPrediction() {
           }
         );
       }
+    );
+  });
+}
+
+function saveFile(fileSave, fileContent, fileName) {
+  fs.writeFile(fileSave, fileContent, "utf8", (err) => {
+    if (err) {
+      console.error(err);
+      return;
+    }
+    console.log(
+      `${colors.yellow}Hasil prediksi telah disimpan di file ${colors.green}${fileName}${colors.reset}`
     );
   });
 }
