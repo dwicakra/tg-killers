@@ -1,3 +1,5 @@
+// Private Tools
+
 const readline = require("readline");
 const fs = require("fs");
 const Table = require("cli-table3");
@@ -17,7 +19,7 @@ function runPrediction() {
     output: process.stdout,
   });
 
-  fs.readFile("prediksi/data.json", "utf8", (err, data) => {
+  fs.readFile("myApps/1-togel/prediksi/data.json", "utf8", (err, data) => {
     if (err) {
       console.error(err);
       return;
@@ -68,7 +70,7 @@ function runPrediction() {
                     );
                     console.log(table.toString());
                     console.log(
-                      `${colors.cyan}\nTerima kasih telah menggunakan bot saya${colors.reset}`
+                      `${colors.cyan}\nTerima kasih telah menggunakan tools saya${colors.reset}`
                     );
                   } else {
                     console.log(`${colors.red}Data tidak ada.${colors.reset}`);

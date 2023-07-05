@@ -1,4 +1,4 @@
-const bot = require("./prediksi/togel.js");
+const bot = require("./data/togelv2.js");
 
 // Warna Teks
 const colors = {
